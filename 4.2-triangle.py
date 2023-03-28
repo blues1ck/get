@@ -16,16 +16,27 @@ def dec2bin(n):
         return(r)
 
 try:
-    print('enter period')
+    print('enter period in seconds')
     t = float(input())
     a = 0
-    while True:
-        if a == 256:
-            a = 0
+    k = 1
+    n = 0
+    while n<5:
         for i in range(8):
-                GPIO.output(dac[i], int(dec2bin(a)[i]))
-        time.sleep(t)
-        a += 1
+            GPIO.output(dac[i], int(dec2bin(a)[i]))
+        time.sleep(t/256)
+        if a==255:
+            a = 254
+            k = 0
+        elif a==0:
+            a = 1
+            k = 1
+            n += 1
+        elif k == 1:
+            a+=1
+        else:
+            a-=1
+        
 finally:
     for i in range(8):
         GPIO.output(dac[i], 0)
